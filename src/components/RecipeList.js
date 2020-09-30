@@ -1,5 +1,14 @@
 import React from "react";
 import { Link, useRouteMatch } from "react-router-dom";
+import {
+  Title,
+  Container,
+  List,
+  ListItem,
+  Text,
+  ItemTitle,
+  Button,
+} from "./Styles.js";
 
 var recipes = [
   {
@@ -36,17 +45,22 @@ var recipes = [
 function RecipeList(props) {
   let match = useRouteMatch();
   return (
-    <div>
-      <h2>This is the list of recipes</h2>
-      <ul>
+    <Container>
+      <Title>This is the list of recipes</Title>
+      <List>
         {recipes.map((recipe) => (
-          <li>
-            <Link to={`${match.url}/${recipe.id}`}>{recipe.name}</Link>
-          </li>
+          <ListItem>
+            <Link to={`${match.url}/${recipe.id}`}>
+              <ItemTitle>{recipe.name}</ItemTitle>
+            </Link>
+            <Text>{recipe.description}</Text>
+          </ListItem>
         ))}
-      </ul>
-      <Link to="/">Home</Link>
-    </div>
+      </List>
+      <Link to="/">
+        <Button primary>Home</Button>
+      </Link>
+    </Container>
   );
 }
 

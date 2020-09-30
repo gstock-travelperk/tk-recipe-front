@@ -1,5 +1,12 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
+import {
+  Title,
+  Button,
+  CircleList,
+  CircleListItem,
+  Container,
+} from "./Styles.js";
 
 var recipes = {
   2: {
@@ -38,14 +45,20 @@ function RecipeDetail(props) {
   let recipe = recipes[recipeId];
   return (
     <div>
-      <h2>{recipe.name}</h2>
+      <Title>{recipe.name}</Title>
       <h3>Ingredients</h3>
-      <ul>
-        {recipe.ingredients.map((ingredient) => (
-          <li>{ingredient.name}</li>
-        ))}
-      </ul>
-      <Link to="/recipes">Recipe</Link>
+      <Container>
+        <CircleList>
+          {recipe.ingredients.map((ingredient) => (
+            <CircleListItem>{ingredient.name}</CircleListItem>
+          ))}
+        </CircleList>
+      </Container>
+      <Container>
+        <Link to="/recipes">
+          <Button primary>Recipes</Button>
+        </Link>
+      </Container>
     </div>
   );
 }
