@@ -1,7 +1,7 @@
 import React from "react";
 import { Suspense } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
-import { useAsyncResource } from "use-async-resource";
+import { useAsyncResource, resourceCache } from "use-async-resource";
 import {
   Title,
   Container,
@@ -36,6 +36,7 @@ function RecipeList({ recipesReader }) {
 }
 
 function Recipes(props) {
+  resourceCache(fetchRecipes).clear();
   const [recipesReader, getRecipes] = useAsyncResource(fetchRecipes, []);
   return (
     <Container>

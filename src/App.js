@@ -11,9 +11,12 @@ function App() {
     <Router>
       <div className="App">
         <Switch>
-          {/* <Route path="/recipes/create">
+          <Route path="/recipes/create">
             <RecipeForm />
-          </Route> */}
+          </Route>
+          <Route path={`/recipes/:recipeId/edit`}>
+            <RecipeForm mode="edit" />
+          </Route>
           <Route path={`/recipes/:recipeId`}>
             <Recipe />
           </Route>
