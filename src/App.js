@@ -2,19 +2,23 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./components/Home.js";
-import RecipeList from "./components/RecipeList.js";
-import RecipeDetail from "./components/RecipeDetail";
+import Recipes from "./components/Recipes.js";
+import Recipe from "./components/Recipe.js";
+import RecipeForm from "./components/RecipeForm.js";
 
 function App() {
   return (
     <Router>
       <div className="App">
         <Switch>
+          {/* <Route path="/recipes/create">
+            <RecipeForm />
+          </Route> */}
           <Route path={`/recipes/:recipeId`}>
-            <RecipeDetail />
+            <Recipe />
           </Route>
           <Route path="/recipes">
-            <RecipeList />
+            <Recipes />
           </Route>
           <Route path="/">
             <Home />
