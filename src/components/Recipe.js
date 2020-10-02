@@ -1,5 +1,4 @@
-import React from "react";
-import { Suspense } from "react";
+import React, { Suspense, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { useAsyncResource, resourceCache } from "use-async-resource";
 import {
@@ -11,7 +10,7 @@ import {
 } from "./Styles.js";
 import { postData } from "../data/data.js";
 
-const fetchRecipe = (recipeId) => {
+const fetchRecipe = (recipeId, setError) => {
   return fetch(
     `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/${recipeId}/`
   )
@@ -21,7 +20,7 @@ const fetchRecipe = (recipeId) => {
       }
       return null;
     })
-    .catch(() => console.log("error"));
+    .catch((err) => setError(true));
 };
 
 function IngredientList(props) {
@@ -82,13 +81,22 @@ function RecipeDetail({ recipeReader }) {
 
 function Recipe(props) {
   let { recipeId } = useParams();
+  const [error, setError] = useState(false);
   resourceCache(fetchRecipe).clear();
-  const [recipeReader, getRecipe] = useAsyncResource(fetchRecipe, recipeId);
+  const [recipeReader, getRecipe] = useAsyncResource(
+    fetchRecipe,
+    recipeId,
+    setError
+  );
   return (
     <div>
-      <Suspense fallback="Loading recipes...">
-        <RecipeDetail recipeReader={recipeReader} />
-      </Suspense>
+      {error ? (
+        <Title>An error ocurred</Title>
+      ) : (
+        <Suspense fallback="Loading recipes...">
+          <RecipeDetail recipeReader={recipeReader} />
+        </Suspense>
+      )}
     </div>
   );
 }
