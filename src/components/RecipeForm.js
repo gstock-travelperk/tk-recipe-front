@@ -4,7 +4,7 @@ import { Title, Container, Button, TextInput } from "./Styles.js";
 import { useHistory, useParams } from "react-router";
 import { postData } from "../data/data.js";
 
-function useFetchRecipe(recipeId, setError) {
+function useFetchRecipe(recipeId, edit, setError) {
   const [recipe, setRecipe] = useState({
     name: "",
     description: "",
@@ -12,6 +12,10 @@ function useFetchRecipe(recipeId, setError) {
   });
 
   useEffect(() => {
+    if (!edit) {
+      return;
+    }
+
     fetch(
       `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/${recipeId}/`
     )
@@ -23,7 +27,7 @@ function useFetchRecipe(recipeId, setError) {
       })
       .then((data) => setRecipe(data))
       .catch((err) => setError(true));
-  }, [recipeId]);
+  }, []);
 
   return [recipe, setRecipe];
 }
@@ -33,7 +37,7 @@ function RecipeForm(props) {
   const history = useHistory();
   let { recipeId } = useParams();
   const [error, setError] = useState(false);
-  const [recipe, setRecipe] = useFetchRecipe(recipeId, setError);
+  const [recipe, setRecipe] = useFetchRecipe(recipeId, edit, setError);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

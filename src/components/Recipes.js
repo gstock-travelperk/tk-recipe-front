@@ -17,11 +17,13 @@ const fetchRecipes = (setError) =>
     .then((res) => {
       setError(false);
       if (res.status === 200) {
-        res.json();
+        return res.json();
       }
       return null;
     })
-    .catch((err) => setError(true));
+    .catch((err) => {
+      setError(true);
+    });
 
 function RecipeList({ recipesReader }) {
   const recipesData = recipesReader();
@@ -60,9 +62,14 @@ function Recipes(props) {
           <Suspense fallback="Loading recipes...">
             <RecipeList recipesReader={recipesReader} />
           </Suspense>
-          <Link to="/">
-            <Button primary>Home</Button>
-          </Link>
+          <Container>
+            <Link to="/">
+              <Button primary>Home</Button>
+            </Link>
+            <Link to="/recipes/create">
+              <Button primary>Create</Button>
+            </Link>
+          </Container>
         </div>
       )}
     </Container>
