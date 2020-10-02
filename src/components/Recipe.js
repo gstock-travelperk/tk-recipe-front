@@ -21,9 +21,12 @@ function IngredientList(props) {
   const { ingredients } = props;
   return (
     <CircleList>
-      {ingredients.map((ingredient) => (
-        <CircleListItem key={ingredient.name}>{ingredient.name}</CircleListItem>
-      ))}
+      {ingredients &&
+        ingredients.map((ingredient) => (
+          <CircleListItem key={ingredient.name}>
+            {ingredient.name}
+          </CircleListItem>
+        ))}
     </CircleList>
   );
 }
