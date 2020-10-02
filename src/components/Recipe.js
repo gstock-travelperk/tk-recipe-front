@@ -13,8 +13,15 @@ import { postData } from "../data/data.js";
 
 const fetchRecipe = (recipeId) => {
   return fetch(
-    `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/${recipeId}`
-  ).then((res) => res.json());
+    `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/${recipeId}/`
+  )
+    .then((res) => {
+      if (res.status === 200) {
+        return res.json();
+      }
+      return null;
+    })
+    .catch(() => console.log("error"));
 };
 
 function IngredientList(props) {
@@ -43,22 +50,32 @@ function RecipeDetail({ recipeReader }) {
 
   return (
     <div>
-      <Title>{recipeData.name}</Title>
-      <h3>Ingredients</h3>
-      <Container>
-        <IngredientList ingredients={recipeData.ingredients} />
-      </Container>
-      <Container>
-        <Link to="/recipes">
-          <Button primary>Recipes</Button>
-        </Link>
-        <Link
-          to={{ pathname: `/recipes/${recipeData.id}/edit`, state: recipeData }}
-        >
-          <Button>Edit</Button>
-        </Link>
-        <Button onClick={deleteRecipe}>Delete</Button>
-      </Container>
+      {recipeData ? (
+        <div>
+          <Title>{recipeData.name}</Title>
+          <p>{recipeData.description}</p>
+          <h3>Ingredients</h3>
+          <Container>
+            <IngredientList ingredients={recipeData.ingredients} />
+          </Container>
+          <Container>
+            <Link to="/recipes">
+              <Button primary>Recipes</Button>
+            </Link>
+            <Link
+              to={{
+                pathname: `/recipes/${recipeData.id}/edit`,
+                state: recipeData,
+              }}
+            >
+              <Button>Edit</Button>
+            </Link>
+            <Button onClick={deleteRecipe}>Delete</Button>
+          </Container>
+        </div>
+      ) : (
+        <Title>Recipe not found</Title>
+      )}
     </div>
   );
 }

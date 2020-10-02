@@ -1,6 +1,11 @@
 import React from "react";
 import "./App.css";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import Home from "./components/Home.js";
 import Recipes from "./components/Recipes.js";
 import Recipe from "./components/Recipe.js";
@@ -11,6 +16,15 @@ function App() {
     <Router>
       <div className="App">
         <Switch>
+          {/* Removes trailing slashes */}
+          <Route
+            path="/:url*(/+)"
+            exact
+            strict
+            render={({ location }) => (
+              <Redirect to={location.pathname.replace(/\/+$/, "")} />
+            )}
+          />
           <Route path="/recipes/create">
             <RecipeForm />
           </Route>
