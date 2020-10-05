@@ -1,6 +1,5 @@
-import React, { Suspense, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
-import { useAsyncResource, resourceCache } from "use-async-resource";
 import {
   Title,
   Button,
@@ -10,17 +9,15 @@ import {
 } from "./Styles.js";
 import { postData } from "../data/DataAPI.js";
 
-const fetchRecipe = (recipeId, setError) => {
+const fetchRecipe = (recipeId) => {
   return fetch(
     `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/${recipeId}/`
-  )
-    .then((res) => {
-      if (res.status === 200) {
-        return res.json();
-      }
-      return null;
-    })
-    .catch((err) => setError(true));
+  ).then((res) => {
+    if (res.status === 200) {
+      return res.json();
+    }
+    return null;
+  });
 };
 
 function IngredientList(props) {
@@ -37,25 +34,24 @@ function IngredientList(props) {
   );
 }
 
-function RecipeDetail({ recipeReader }) {
-  const recipeData = recipeReader();
+function RecipeDetail({ recipe }) {
   const history = useHistory();
 
   const deleteRecipe = () => {
-    let url = `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/${recipeData.id}/`;
+    let url = `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/${recipe.id}/`;
 
     fetch(url, { method: "DELETE" }).then(() => history.push("/recipes/"));
   };
 
   return (
     <div>
-      {recipeData ? (
+      {recipe ? (
         <div>
-          <Title>{recipeData.name}</Title>
-          <p>{recipeData.description}</p>
+          <Title>{recipe.name}</Title>
+          <p>{recipe.description}</p>
           <h3>Ingredients</h3>
           <Container>
-            <IngredientList ingredients={recipeData.ingredients} />
+            <IngredientList ingredients={recipe.ingredients} />
           </Container>
           <Container>
             <Link to="/recipes">
@@ -63,8 +59,7 @@ function RecipeDetail({ recipeReader }) {
             </Link>
             <Link
               to={{
-                pathname: `/recipes/${recipeData.id}/edit`,
-                state: recipeData,
+                pathname: `/recipes/${recipe.id}/edit`,
               }}
             >
               <Button>Edit</Button>
@@ -80,23 +75,26 @@ function RecipeDetail({ recipeReader }) {
 }
 
 function Recipe(props) {
-  let { recipeId } = useParams();
-  const [error, setError] = useState(false);
-  resourceCache(fetchRecipe).clear();
-  const [recipeReader, getRecipe] = useAsyncResource(
-    fetchRecipe,
-    recipeId,
-    setError
-  );
+  const { recipeId } = useParams();
+
+  const [{ data, error, isLoading }, dispatch] = useState({
+    data: null,
+    error: null,
+    isLoading: false,
+  });
+
+  useEffect(() => {
+    dispatch((state) => ({ ...state, isLoading: true }));
+    fetchRecipe(recipeId)
+      .then((data) => dispatch({ data, error: null, isLoading: false }))
+      .catch((error) => dispatch({ data: null, error, isLoading: false }));
+  }, []);
+
+  if (error) return <Title>An error ocurred</Title>;
+
   return (
     <div>
-      {error ? (
-        <Title>An error ocurred</Title>
-      ) : (
-        <Suspense fallback="Loading recipes...">
-          <RecipeDetail recipeReader={recipeReader} />
-        </Suspense>
-      )}
+      {isLoading ? <p>Loading recipe...</p> : <RecipeDetail recipe={data} />}
     </div>
   );
 }

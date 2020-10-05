@@ -12,6 +12,7 @@ function useFetchRecipe(recipeId, edit, setError) {
   });
 
   useEffect(() => {
+    //Couldn't find a good way to handle this
     if (!edit) {
       return;
     }
