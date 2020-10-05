@@ -7,18 +7,7 @@ import {
   CircleListItem,
   Container,
 } from "./Styles.js";
-import { postData } from "../data/DataAPI.js";
-
-const fetchRecipe = (recipeId) => {
-  return fetch(
-    `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/${recipeId}/`
-  ).then((res) => {
-    if (res.status === 200) {
-      return res.json();
-    }
-    return null;
-  });
-};
+import { fetchRecipe } from "../data/DataAPI.js";
 
 function IngredientList(props) {
   const { ingredients } = props;

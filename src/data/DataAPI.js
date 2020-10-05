@@ -15,3 +15,14 @@ export const postData = async (url = "", method, data = {}) => {
   });
   return response.json(); // parses JSON response into native JavaScript objects
 };
+
+export const fetchRecipe = (recipeId) => {
+  return fetch(
+    `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/${recipeId}/`
+  ).then((res) => {
+    if (res.status === 200) {
+      return res.json();
+    }
+    return null;
+  });
+};
