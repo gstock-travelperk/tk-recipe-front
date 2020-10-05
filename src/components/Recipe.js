@@ -77,7 +77,7 @@ function Recipe(props) {
     fetchRecipe(recipeId)
       .then((data) => dispatch({ data, error: null, isLoading: false }))
       .catch((error) => dispatch({ data: null, error, isLoading: false }));
-  }, []);
+  }, [recipeId]);
 
   if (error) return <Title>An error ocurred</Title>;
 

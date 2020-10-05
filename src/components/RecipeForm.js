@@ -32,7 +32,7 @@ function RecipeForm(props) {
     fetchRecipe(recipeId)
       .then((data) => dispatch({ data, error: null, isLoading: false }))
       .catch((error) => dispatch({ data: null, error, isLoading: false }));
-  }, []);
+  }, [recipeId, edit]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
