@@ -8,7 +8,7 @@ import {
   CircleListItem,
   Container,
 } from "./Styles.js";
-import { postData } from "../data/data.js";
+import { postData } from "../data/DataAPI.js";
 
 const fetchRecipe = (recipeId, setError) => {
   return fetch(

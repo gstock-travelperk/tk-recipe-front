@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { IngredientList } from "./Recipe.js";
 import { Title, Container, Button, TextInput } from "./Styles.js";
 import { useHistory, useParams } from "react-router";
-import { postData } from "../data/data.js";
+import { postData } from "../data/DataAPI.js";
 
 function useFetchRecipe(recipeId, edit, setError) {
   const [recipe, setRecipe] = useState({

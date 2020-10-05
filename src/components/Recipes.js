@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Suspense } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 import { useAsyncResource, resourceCache } from "use-async-resource";
@@ -12,27 +12,23 @@ import {
   Button,
 } from "./Styles.js";
 
-const fetchRecipes = (setError) =>
-  fetch(`${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/`)
-    .then((res) => {
-      setError(false);
+const fetchRecipes = () =>
+  fetch(`${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/`).then(
+    (res) => {
       if (res.status === 200) {
         return res.json();
       }
       return null;
-    })
-    .catch((err) => {
-      setError(true);
-    });
+    }
+  );
 
-function RecipeList({ recipesReader }) {
-  const recipesData = recipesReader();
+function RecipeList({ recipes }) {
   let match = useRouteMatch();
   return (
     <div>
-      {recipesData ? (
+      {recipes ? (
         <List>
-          {recipesData.map((recipe) => (
+          {recipes.map((recipe) => (
             <ListItem key={recipe.id}>
               <Link to={`${match.url}/${recipe.id}`}>
                 <ItemTitle>{recipe.name}</ItemTitle>
@@ -49,9 +45,19 @@ function RecipeList({ recipesReader }) {
 }
 
 function Recipes(props) {
-  const [error, setError] = useState(false);
-  resourceCache(fetchRecipes).clear();
-  const [recipesReader, getRecipes] = useAsyncResource(fetchRecipes, setError);
+  const [{ data, error, isLoading }, dispatch] = useState({
+    data: null,
+    error: null,
+    isLoading: false,
+  });
+
+  useEffect(() => {
+    dispatch((state) => ({ ...state, isLoading: true }));
+    fetchRecipes()
+      .then((data) => dispatch({ data, error: null, isLoading: false }))
+      .catch((error) => dispatch({ data: null, error, isLoading: false }));
+  }, []);
+
   return (
     <Container>
       {error ? (
@@ -59,9 +65,11 @@ function Recipes(props) {
       ) : (
         <div>
           <Title>This is the list of recipes</Title>
-          <Suspense fallback="Loading recipes...">
-            <RecipeList recipesReader={recipesReader} />
-          </Suspense>
+          {isLoading ? (
+            <p>Loading recipes...</p>
+          ) : (
+            <RecipeList recipes={data} />
+          )}
           <Container>
             <Link to="/">
               <Button primary>Home</Button>
