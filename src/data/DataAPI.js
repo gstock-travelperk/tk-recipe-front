@@ -1,4 +1,4 @@
-export const postData = async (url = "", method, data = {}) => {
+const postData = async (url = "", method, data = {}) => {
   // Default options are marked with *
   const response = await fetch(url, {
     method: method, // *GET, POST, PUT, DELETE, etc.
@@ -16,7 +16,7 @@ export const postData = async (url = "", method, data = {}) => {
   return response.json(); // parses JSON response into native JavaScript objects
 };
 
-export const fetchRecipe = (recipeId) => {
+const fetchRecipe = (recipeId) => {
   return fetch(
     `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/${recipeId}/`
   ).then((res) => {
@@ -26,3 +26,10 @@ export const fetchRecipe = (recipeId) => {
     return null;
   });
 };
+
+const api = {
+  postData,
+  fetchRecipe,
+};
+
+export default api;

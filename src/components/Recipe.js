@@ -7,7 +7,7 @@ import {
   CircleListItem,
   Container,
 } from "./Styles.js";
-import { fetchRecipe } from "../data/DataAPI.js";
+import api from "../data/DataAPI.js";
 
 function IngredientList(props) {
   const { ingredients } = props;
@@ -74,7 +74,8 @@ function Recipe(props) {
 
   useEffect(() => {
     dispatch((state) => ({ ...state, isLoading: true }));
-    fetchRecipe(recipeId)
+    api
+      .fetchRecipe(recipeId)
       .then((data) => dispatch({ data, error: null, isLoading: false }))
       .catch((error) => dispatch({ data: null, error, isLoading: false }));
   }, [recipeId]);

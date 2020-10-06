@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { IngredientList } from "./Recipe.js";
 import { Title, Container, Button, TextInput } from "./Styles.js";
 import { useHistory, useParams } from "react-router";
-import { postData, fetchRecipe } from "../data/DataAPI.js";
+import api from "../data/DataAPI.js";
 
 function RecipeForm(props) {
   const edit = props.mode === "edit";
@@ -29,7 +29,8 @@ function RecipeForm(props) {
       return;
     }
     dispatch((state) => ({ ...state, isLoading: true }));
-    fetchRecipe(recipeId)
+    api
+      .fetchRecipe(recipeId)
       .then((data) => dispatch({ data, error: null, isLoading: false }))
       .catch((error) => dispatch({ data: null, error, isLoading: false }));
   }, [recipeId, edit]);
@@ -64,7 +65,7 @@ function RecipeForm(props) {
       ? `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/${data.id}/`
       : `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/`;
 
-    postData(url, edit ? "PUT" : "POST", data).then((data) => {
+    api.postData(url, edit ? "PUT" : "POST", data).then((data) => {
       history.push(`/recipes/${data.id}/`);
     });
   };
@@ -104,12 +105,13 @@ function RecipeForm(props) {
               name="ingredient"
               placeholder="Ingredient"
               onKeyDown={keyPress}
+              data-testid="recipe_ingredient"
             />
             <Container>
               <IngredientList ingredients={data.ingredients} />
             </Container>
             <Container>
-              <Button onClick={submit} primary>
+              <Button onClick={submit} primary data-testid="submit_button">
                 {edit ? "Edit" : "Create"}
               </Button>
             </Container>
