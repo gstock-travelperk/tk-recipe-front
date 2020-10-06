@@ -8,8 +8,6 @@ function RecipeForm(props) {
   const edit = props.mode === "edit";
   const history = useHistory();
   let { recipeId } = useParams();
-  // const [error, setError] = useState(false);
-  // const [recipe, setRecipe] = useFetchRecipe(recipeId, edit, setError);
 
   let recipe = {
     name: "",
