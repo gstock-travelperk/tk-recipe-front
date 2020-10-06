@@ -81,7 +81,7 @@ function RecipeForm(props) {
         <p>Loading recipe...</p>
       ) : (
         <Container>
-          <Title>{edit ? "Edit" : "New"} Recipe</Title>
+          <Title data-testid="page_title">{edit ? "Edit" : "New"} Recipe</Title>
           <div>
             <TextInput
               type="text"
@@ -89,6 +89,7 @@ function RecipeForm(props) {
               onChange={handleChange}
               name="name"
               placeholder="Name"
+              data-testid="recipe_name"
             />
             <TextInput
               type="text"
@@ -96,6 +97,7 @@ function RecipeForm(props) {
               onChange={handleChange}
               name="description"
               placeholder="Description"
+              data-testid="recipe_description"
             />
             <TextInput
               type="text"

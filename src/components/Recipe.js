@@ -36,8 +36,8 @@ function RecipeDetail({ recipe }) {
     <div>
       {recipe ? (
         <div>
-          <Title>{recipe.name}</Title>
-          <p>{recipe.description}</p>
+          <Title data-testid="recipe_title">{recipe.name}</Title>
+          <p data-testid="recipe_description">{recipe.description}</p>
           <h3>Ingredients</h3>
           <Container>
             <IngredientList ingredients={recipe.ingredients} />

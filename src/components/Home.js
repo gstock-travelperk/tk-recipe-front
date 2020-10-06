@@ -8,7 +8,7 @@ function Home(props) {
     <div>
       <Title>TK Recipe App</Title>
       <p>The best recipes by the best TK chefs are listed here</p>
-      <Link to="/recipes">
+      <Link role="link" to="/recipes">
         <Button primary>Recipes</Button>
       </Link>
     </div>
