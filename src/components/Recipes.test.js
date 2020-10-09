@@ -1,6 +1,4 @@
 import React from "react";
-import { rest } from "msw";
-import { setupServer } from "msw/node";
 import {
   render,
   screen,
@@ -9,6 +7,7 @@ import {
 import "@testing-library/jest-dom/extend-expect";
 import Recipes from "./Recipes.js";
 import { BrowserRouter as Router } from "react-router-dom";
+import api from "../data/DataAPI.js";
 
 const recipesResponse = [
   {
@@ -42,15 +41,8 @@ const recipesResponse = [
   },
 ];
 
-const server = setupServer(
-  rest.get("http://localhost:8000/api/recipe/recipes/", (req, res, ctx) => {
-    return res(ctx.json(recipesResponse));
-  })
-);
-
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+const mockFetchRecipe = jest.spyOn(api, "fetchRecipes");
+mockFetchRecipe.mockReturnValue(Promise.resolve(recipesResponse));
 
 test("loads and displays the recipies list", async () => {
   render(
