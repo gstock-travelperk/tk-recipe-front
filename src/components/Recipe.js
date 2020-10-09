@@ -13,61 +13,18 @@ function IngredientList(props) {
   const { ingredients } = props;
   return (
     <CircleList>
-      {ingredients &&
-        ingredients.map((ingredient) => (
-          <CircleListItem key={ingredient.name}>
-            {ingredient.name}
-          </CircleListItem>
-        ))}
+      {ingredients?.map((ingredient) => (
+        <CircleListItem key={ingredient.name}>{ingredient.name}</CircleListItem>
+      ))}
     </CircleList>
-  );
-}
-
-function RecipeDetail({ recipe }) {
-  const history = useHistory();
-
-  const deleteRecipe = () => {
-    let url = `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/${recipe.id}/`;
-
-    fetch(url, { method: "DELETE" }).then(() => history.push("/recipes/"));
-  };
-
-  return (
-    <div>
-      {recipe ? (
-        <div>
-          <Title data-testid="recipe_title">{recipe.name}</Title>
-          <p data-testid="recipe_description">{recipe.description}</p>
-          <h3>Ingredients</h3>
-          <Container>
-            <IngredientList ingredients={recipe.ingredients} />
-          </Container>
-          <Container>
-            <Link to="/recipes">
-              <Button primary>Recipes</Button>
-            </Link>
-            <Link
-              to={{
-                pathname: `/recipes/${recipe.id}/edit`,
-              }}
-            >
-              <Button>Edit</Button>
-            </Link>
-            <Button onClick={deleteRecipe}>Delete</Button>
-          </Container>
-        </div>
-      ) : (
-        <Title>Recipe not found</Title>
-      )}
-    </div>
   );
 }
 
 function Recipe(props) {
   const { recipeId } = useParams();
 
-  const [{ data, error, isLoading }, dispatch] = useState({
-    data: null,
+  const [{ recipe, error, isLoading }, dispatch] = useState({
+    recipe: null,
     error: null,
     isLoading: false,
   });
@@ -76,15 +33,43 @@ function Recipe(props) {
     dispatch((state) => ({ ...state, isLoading: true }));
     api
       .fetchRecipe(recipeId)
-      .then((data) => dispatch({ data, error: null, isLoading: false }))
-      .catch((error) => dispatch({ data: null, error, isLoading: false }));
+      .then((recipe) => dispatch({ recipe, error: null, isLoading: false }))
+      .catch((error) => dispatch({ recipe: null, error, isLoading: false }));
   }, [recipeId]);
 
+  const history = useHistory();
+
+  const deleteRecipe = () => {
+    let url = `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/${recipe.id}/`;
+
+    fetch(url, { method: "DELETE" }).then(() => history.push("/recipes/"));
+  };
+
   if (error) return <Title>An error ocurred</Title>;
+  else if (isLoading) return <p>Loading recipe...</p>;
+  else if (!recipe) return <Title>Recipe not found</Title>;
 
   return (
     <div>
-      {isLoading ? <p>Loading recipe...</p> : <RecipeDetail recipe={data} />}
+      <Title>{recipe.name}</Title>
+      <p>{recipe.description}</p>
+      <h3>Ingredients</h3>
+      <Container>
+        <IngredientList ingredients={recipe.ingredients} />
+      </Container>
+      <Container>
+        <Link to="/recipes">
+          <Button primary>Recipes</Button>
+        </Link>
+        <Link
+          to={{
+            pathname: `/recipes/${recipe.id}/edit`,
+          }}
+        >
+          <Button>Edit</Button>
+        </Link>
+        <Button onClick={deleteRecipe}>Delete</Button>
+      </Container>
     </div>
   );
 }

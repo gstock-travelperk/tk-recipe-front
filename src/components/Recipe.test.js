@@ -45,8 +45,6 @@ test("loads and displays a recipe", async () => {
 
   await waitForElementToBeRemoved(() => screen.getByText("Loading recipe..."));
 
-  expect(screen.getByTestId("recipe_title")).toHaveTextContent("Empanadas");
-  expect(screen.getByTestId("recipe_description")).toHaveTextContent(
-    "Carne envuelta en masa"
-  );
+  expect(screen.getByText("Empanadas")).toBeInTheDocument();
+  expect(screen.getByText("Carne envuelta en masa")).toBeInTheDocument();
 });
