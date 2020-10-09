@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Title } from "./Styles.js";
 import { Button } from "./Styles.js";
 
-function Home(props) {
+function Home() {
   return (
     <div>
       <Title>TK Recipe App</Title>
