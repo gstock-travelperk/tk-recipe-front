@@ -11,8 +11,7 @@ test("test renders TK Recipe App", () => {
 
 test("access recipies", async () => {
   render(<App />);
-  const leftClick = { button: 0 };
-  userEvent.click(screen.getByRole("link"), leftClick);
+  userEvent.click(screen.getByRole("link"));
   expect(
     await screen.findByText(/This is the list of recipes/i)
   ).toBeInTheDocument();
