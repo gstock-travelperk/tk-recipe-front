@@ -27,9 +27,16 @@ const fetchRecipe = (recipeId) => {
   });
 };
 
+const deleteRecipe = (recipeId) => {
+  let url = `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/${recipeId}/`;
+
+  return fetch(url, { method: "DELETE" });
+};
+
 const api = {
   postData,
   fetchRecipe,
+  deleteRecipe,
 };
 
 export default api;

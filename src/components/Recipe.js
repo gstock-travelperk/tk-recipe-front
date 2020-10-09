@@ -21,6 +21,7 @@ function IngredientList(props) {
 }
 
 function Recipe(props) {
+  const history = useHistory();
   const { recipeId } = useParams();
 
   const [{ recipe, error, isLoading }, dispatch] = useState({
@@ -36,14 +37,6 @@ function Recipe(props) {
       .then((recipe) => dispatch({ recipe, error: null, isLoading: false }))
       .catch((error) => dispatch({ recipe: null, error, isLoading: false }));
   }, [recipeId]);
-
-  const history = useHistory();
-
-  const deleteRecipe = () => {
-    let url = `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/${recipe.id}/`;
-
-    fetch(url, { method: "DELETE" }).then(() => history.push("/recipes/"));
-  };
 
   if (error) return <Title>An error ocurred</Title>;
   else if (isLoading) return <p>Loading recipe...</p>;
@@ -68,7 +61,13 @@ function Recipe(props) {
         >
           <Button>Edit</Button>
         </Link>
-        <Button onClick={deleteRecipe}>Delete</Button>
+        <Button
+          onClick={() =>
+            api.deleteRecipe(recipe.id).then(() => history.push("/recipes/"))
+          }
+        >
+          Delete
+        </Button>
       </Container>
     </div>
   );
