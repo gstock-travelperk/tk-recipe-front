@@ -81,12 +81,8 @@ test("create a recipe", async () => {
   );
 
   // fill out the form
-  fireEvent.change(screen.getByTestId("recipe_name"), {
-    target: { value: "Cheesecake" },
-  });
-  fireEvent.change(screen.getByTestId("recipe_description"), {
-    target: { value: "A cake full of cheese and sweets" },
-  });
+  userEvent.type(screen.getByTestId("recipe_name"), "Cheesecake");
+  userEvent.type(screen.getByTestId("recipe_description"), "A cake full of cheese and sweets");
   await userEvent.type(screen.getByTestId("recipe_ingredient"), "Cheese");
   expect(screen.getByTestId("recipe_ingredient")).toHaveValue("Cheese");
   fireEvent.keyDown(screen.getByTestId("recipe_ingredient"), {
