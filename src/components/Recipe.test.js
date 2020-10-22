@@ -37,6 +37,7 @@ test("loads and displays a recipe", async () => {
 
   await waitForElementToBeRemoved(() => screen.getByText("Loading recipe..."));
 
+  expect(mockFetchRecipe).toHaveBeenCalledWith("1")
   expect(screen.getByText("Empanadas")).toBeInTheDocument();
   expect(screen.getByText("Carne envuelta en masa")).toBeInTheDocument();
 });
