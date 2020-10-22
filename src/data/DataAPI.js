@@ -43,11 +43,20 @@ const deleteRecipe = (recipeId) => {
   return fetch(url, { method: "DELETE" });
 };
 
+const saveRecipe = (data, edit) => {
+  let url = edit
+    ? `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/${data.id}/`
+    : `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/`;
+
+  return api.postData(url, edit ? "PUT" : "POST", data);
+};
+
 const api = {
   postData,
   fetchRecipe,
   deleteRecipe,
   fetchRecipes,
+  saveRecipe,
 };
 
 export default api;

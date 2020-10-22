@@ -59,11 +59,7 @@ function RecipeForm(props) {
   };
 
   const submit = () => {
-    let url = edit
-      ? `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/${data.id}/`
-      : `${process.env.REACT_APP_API_BASEURL}/api/recipe/recipes/`;
-
-    api.postData(url, edit ? "PUT" : "POST", data).then((data) => {
+    api.saveRecipe(data, edit).then((data) => {
       history.push(`/recipes/${data.id}/`);
     });
   };
