@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Title,
   Container,
@@ -12,7 +12,6 @@ import {
 import api from "../data/DataAPI.js";
 
 function RecipeList({ recipes }) {
-  let match = useRouteMatch();
   return (
     <div>
       {recipes ? (
@@ -20,7 +19,7 @@ function RecipeList({ recipes }) {
           {recipes.map((recipe) => (
             <ListItem key={recipe.id}>
               <Link
-                to={`${match.url}/${recipe.id}`}
+                to={`recipes/${recipe.id}`}
                 data-testid={`recipe_link_${recipe.id}`}
               >
                 <ItemTitle data-testid={`recipe_title_${recipe.id}`}>
