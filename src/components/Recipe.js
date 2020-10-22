@@ -24,18 +24,18 @@ function Recipe(props) {
   const history = useHistory();
   const { recipeId } = useParams();
 
-  const [{ recipe, error, isLoading }, dispatch] = useState({
+  const [{ recipe, error, isLoading }, setResult] = useState({
     recipe: null,
     error: null,
     isLoading: false,
   });
 
   useEffect(() => {
-    dispatch((state) => ({ ...state, isLoading: true }));
+    setResult((state) => ({ ...state, isLoading: true }));
     api
       .fetchRecipe(recipeId)
-      .then((recipe) => dispatch({ recipe, error: null, isLoading: false }))
-      .catch((error) => dispatch({ recipe: null, error, isLoading: false }));
+      .then((recipe) => setResult({ recipe, error: null, isLoading: false }))
+      .catch((error) => setResult({ recipe: null, error, isLoading: false }));
   }, [recipeId]);
 
   if (error) return <Title>An error ocurred</Title>;
